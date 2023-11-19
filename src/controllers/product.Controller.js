@@ -35,19 +35,7 @@ export const updateProduct = async (req, res) => {
   let { updateFields } = req.body;
 
   try {
-    // const productFound = await Product.findById(id);
-
-    // if (!productFound) {
-    //   return res.status(400).json({ message: "no existe" });
-    // }
-
-
-    // productFound.name = name;
-    // productFound.description = description;
-    // productFound.category = category;
-
-    // await productFound.save();
-
+    
     if (userRoleToken !== LOGIN_ADMIN_TOKEN) {
       return res.status(403).json({ message: "permission denied" });
     }
@@ -59,10 +47,6 @@ export const updateProduct = async (req, res) => {
     } else {
       return res.status(404).json({ success: false, message: 'Product not found.' });
     }
-
-    // res.json({
-    //   _id: productFound._id,
-    // });
 
   } catch (error) {
     return res.status(500).json({ message: error.message });
