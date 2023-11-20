@@ -143,5 +143,5 @@ export const login = async (req, res) => {
     TOKEN_SECRET
   );
 
-  res.status(201).json({ token: token, username: userFound.username });
+  res.status(200).json({ token: token, username: userFound.username });
 };
