@@ -22,18 +22,23 @@ export const deleteItemFromCart = async (req, res) => {
       return res.status(403).json({ message: "Forbidden" });
     }
 
-    const productIndex = foundCart.products.findIndex(
-      (product) => product._id.toString() === id
+    const productIndex = foundCart.products.findIndex((product) =>
+      product._id.equals(foundProduct._id)
     );
 
-    if (productIndex === -1) {
+    if (productIndex !== -1) {
+      const quantity = --foundCart.products[productIndex].quantity;
+      const unitPrice = foundCart.products[productIndex].unitPrice;
+      foundCart.products[productIndex].totalPrice = quantity * unitPrice;
+      quantity == 0 ? foundCart.products.splice(productIndex, 1) : "";
+    } else {
       return res.status(404).json({ message: "Product not found in the cart" });
     }
 
-    foundCart.products.splice(productIndex, 1);
+    foundCart.markModified("products");
     await foundCart.save();
 
-    return res.status(200).json({ message: "Succesfully deleted" });
+    return res.status(200).json({ message: "Succesfully deleted", foundCart });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -59,14 +64,31 @@ export const addItemToCart = async (req, res) => {
       return res.status(403).json({ message: "Forbidden" });
     }
 
-    await Cart.updateOne(
-      { ownerId: userId },
-      { $push: { products: foundProduct } }
+    const productIndex = foundCart.products.findIndex((product) =>
+      product._id.equals(foundProduct._id)
     );
 
-     foundCart = await Cart.findOne({ ownerId: userId });
+    if (productIndex !== -1) {
+      const quantity = ++foundCart.products[productIndex].quantity;
+      const unitPrice = foundCart.products[productIndex].unitPrice;
+      foundCart.products[productIndex].totalPrice = quantity * unitPrice;
+    } else {
+      foundCart.products.push({
+        name: foundProduct.name,
+        description: foundProduct.description,
+        category: foundProduct.category,
+        images: foundProduct.images,
+        unitPrice: foundProduct.price,
+        totalPrice: foundProduct.price,
+        quantity: 1,
+        _id: foundProduct._id,
+      });
+    }
 
-    return res.status(200).json({ message: "Succesfully added", totalProducts: foundCart.products.length});
+    foundCart.markModified("products");
+    await foundCart.save();
+
+    return res.status(200).json({ message: "Succesfully added", foundCart });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -85,7 +107,7 @@ export const deleteAllProducts = async (req, res) => {
     userCart.products = [];
     await userCart.save();
 
-    return res.status(200).json({ message: "Succesfully deleted" });
+    return res.status(200).json({ message: "Succesfully deleted", userCart });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -96,7 +118,7 @@ export const getCart = async (req, res) => {
 
   try {
     const userCart = await Cart.findOne({ ownerId: userId });
-    
+
     if (userCart.ownerId !== userId && userRoleToken !== LOGIN_ADMIN_TOKEN) {
       return res.status(403).json({ message: "Forbidden" });
     }
