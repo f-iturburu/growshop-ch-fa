@@ -45,7 +45,7 @@ export const addItemToCart = async (req, res) => {
 
   try {
     const foundProduct = await Product.findById(id);
-    const foundCart = await Cart.findOne({ ownerId: userId });
+    let foundCart = await Cart.findOne({ ownerId: userId });
 
     if (!foundProduct) {
       return res.status(404).json({ message: "Product not found" });
@@ -63,6 +63,8 @@ export const addItemToCart = async (req, res) => {
       { ownerId: userId },
       { $push: { products: foundProduct } }
     );
+
+     foundCart = await Cart.findOne({ ownerId: userId });
 
     return res.status(200).json({ message: "Succesfully added", totalProducts: foundCart.products.length});
   } catch (error) {
@@ -94,7 +96,7 @@ export const getCart = async (req, res) => {
 
   try {
     const userCart = await Cart.findOne({ ownerId: userId });
-
+    
     if (userCart.ownerId !== userId && userRoleToken !== LOGIN_ADMIN_TOKEN) {
       return res.status(403).json({ message: "Forbidden" });
     }
