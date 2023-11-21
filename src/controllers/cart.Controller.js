@@ -64,7 +64,7 @@ export const addItemToCart = async (req, res) => {
       { $push: { products: foundProduct } }
     );
 
-    return res.status(200).json({ message: "Succesfully added" });
+    return res.status(200).json({ message: "Succesfully added", totalProducts: foundCart.products.length});
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
