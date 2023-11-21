@@ -3,7 +3,8 @@ import Product from "./product.Model.js"
 
 const cart = new Schema({
     products: Array,
-    ownerId: String
+    ownerId: String,
+    totalProducts: Number
 },{
     timestamps:true
 })

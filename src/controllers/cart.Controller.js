@@ -85,6 +85,10 @@ export const addItemToCart = async (req, res) => {
       });
     }
 
+    let totalProducts = 0
+    foundCart.products.map(i => totalProducts += i.quantity)
+    foundCart.totalProducts = totalProducts
+    
     foundCart.markModified("products");
     await foundCart.save();
 
