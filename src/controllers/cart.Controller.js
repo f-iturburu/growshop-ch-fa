@@ -34,7 +34,7 @@ export const deleteItemFromCart = async (req, res) => {
       let totalProducts = 0
       let totalPrice = 0
       foundCart.products.map(i => totalProducts += i.quantity)
-      foundCart.products.map(i => totalPrice += i.quantity * i.price)
+      foundCart.products.map(i => totalPrice += i.totalPrice)
       foundCart.totalProducts = totalProducts
       foundCart.totalPrice = totalPrice
     } else {
@@ -96,7 +96,7 @@ export const addItemToCart = async (req, res) => {
     let totalProducts = 0
     let totalPrice = 0
     foundCart.products.map(i => totalProducts += i.quantity)
-    foundCart.products.map(i => totalPrice += i.quantity * i.price)
+    foundCart.products.map(i => totalPrice += i.totalPrice)
     foundCart.totalProducts = totalProducts
     foundCart.totalPrice = totalPrice
 
