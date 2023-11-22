@@ -28,7 +28,7 @@ export const postPurchase = async (req, res) => {
 
     return res.status(201).json({ message: "Succesfully created" });
   } catch (error) {
-    console.log(error);
+
     return res.status(500).json({ message: error.message });
   }
 };
@@ -38,7 +38,6 @@ export const getPurchases = async (req, res) => {
 
   try {
     let foundPurchaseOrder = await PurchaseOrder.find({ userId: userId });
-    console.log(foundPurchaseOrder);
 
     if (!foundPurchaseOrder) {
       return res.status(404).json({ message: "Order not found" });
