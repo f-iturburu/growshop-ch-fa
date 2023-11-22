@@ -32,7 +32,9 @@ export const deleteItemFromCart = async (req, res) => {
       foundCart.products[productIndex].totalPrice = quantity * unitPrice;
       quantity == 0 ? foundCart.products.splice(productIndex, 1) : "";
       let totalProducts = 0
+      let totalPrice = 0
       foundCart.products.map(i => totalProducts += i.quantity)
+      foundCart.products.map(i => totalPrice += i.quantity * i.price)
       foundCart.totalProducts = totalProducts
     } else {
       return res.status(404).json({ message: "Product not found in cart" });
@@ -91,7 +93,9 @@ export const addItemToCart = async (req, res) => {
     }
 
     let totalProducts = 0
+    let totalPrice = 0
     foundCart.products.map(i => totalProducts += i.quantity)
+    foundCart.products.map(i => totalPrice += i.quantity * i.price)
     foundCart.totalProducts = totalProducts
 
     foundCart.markModified("products");
