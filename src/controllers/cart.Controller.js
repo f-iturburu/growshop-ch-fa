@@ -36,6 +36,7 @@ export const deleteItemFromCart = async (req, res) => {
       foundCart.products.map(i => totalProducts += i.quantity)
       foundCart.products.map(i => totalPrice += i.quantity * i.price)
       foundCart.totalProducts = totalProducts
+      foundCart.totalPrice = totalPrice
     } else {
       return res.status(404).json({ message: "Product not found in cart" });
     }
@@ -97,6 +98,7 @@ export const addItemToCart = async (req, res) => {
     foundCart.products.map(i => totalProducts += i.quantity)
     foundCart.products.map(i => totalPrice += i.quantity * i.price)
     foundCart.totalProducts = totalProducts
+    foundCart.totalPrice = totalPrice
 
     foundCart.markModified("products");
     await foundCart.save();
