@@ -1,5 +1,4 @@
 import {Schema, model} from 'mongoose';
-import Product from "./product.Model"
 
 const Order = new Schema({
     products: Array,
