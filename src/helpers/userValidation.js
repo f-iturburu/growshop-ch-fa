@@ -6,11 +6,12 @@ const schemaValidateUsername = Joi.object({
     .max(15)
     .required()
     .pattern(/^[A-Za-z0-9]+$/)
-    .messages({'string.min': "El nombre de usuario ingresado es demasiado corto",
-               'string.max': "El nombre de usuario ingresado es demasiado largo",
-               'string.pattern.base':"El nombre de usuario ingresado es invalido",
-               'string.empty': "Debes ingresar un nombre de usuario"
-}),
+    .messages({
+      "string.min": "El nombre de usuario ingresado es demasiado corto",
+      "string.max": "El nombre de usuario ingresado es demasiado largo",
+      "string.pattern.base": "El nombre de usuario ingresado es invalido",
+      "string.empty": "Debes ingresar un nombre de usuario",
+    }),
 });
 
 const schemaValidateEmail = Joi.object({
@@ -19,10 +20,11 @@ const schemaValidateEmail = Joi.object({
     .max(30)
     .required()
     .email()
-    .message({'string.email': "El email ingresado es invalido.",
-    'string.max': "El email ingresado es demasiado largo",
-    'string.empty': "Debes ingresar un email"
-}),
+    .message({
+      "string.email": "El email ingresado es invalido.",
+      "string.max": "El email ingresado es demasiado largo",
+      "string.empty": "Debes ingresar un email",
+    }),
 });
 
 const schemaValidatePassword = Joi.object({
@@ -36,7 +38,7 @@ const schemaValidatePassword = Joi.object({
       "string.min": "La contraseña debe ser de al menos 8 digitos",
       "string.max": "La contraseña debe ser de maximo 30 digitos",
       "string.pattern.base": "La contraseña ingresada es invalida",
-      'string.empty': "Debes ingresar una contraseña"
+      "string.empty": "Debes ingresar una contraseña",
     }),
 });
 
@@ -54,4 +56,3 @@ export const validatePassword = (password) => {
   const { error } = schemaValidatePassword.validate(password);
   return error;
 };
-

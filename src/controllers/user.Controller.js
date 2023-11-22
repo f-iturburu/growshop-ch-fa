@@ -1,7 +1,7 @@
 import User from "../models/user.Model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Cart from "../models/cart.Model.js"
+import Cart from "../models/cart.Model.js";
 import {
   LOGIN_ADMIN_TOKEN,
   LOGIN_USER_TOKEN,
@@ -28,7 +28,7 @@ export const createUser = async (req, res) => {
 
   try {
     const emailFound = await User.findOne({ email: email });
-    
+
     if (emailFound) {
       return res
         .status(400)
@@ -50,13 +50,13 @@ export const createUser = async (req, res) => {
       password: passwordHashed,
       email: email,
       role: "User",
-      premium: false
+      premium: false,
     });
 
     const newCart = await Cart.create({
       products: [],
-      ownerId: newUser._id
-    })
+      ownerId: newUser._id,
+    });
 
     const token = jwt.sign(
       {
@@ -89,13 +89,13 @@ export const deleteUser = async (req, res) => {
     }
 
     await User.findByIdAndDelete(id);
-    res.status(200)
+    res.status(200);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-export const updatePremiumUser = async (req,res) =>{
+export const updatePremiumUser = async (req, res) => {
   let { userRoleToken, userId } = req.userToken;
 
   try {
@@ -105,14 +105,13 @@ export const updatePremiumUser = async (req,res) =>{
       return res.status(403).json({ message: "Forbidden" });
     }
 
-    userFound.premium = !userFound.premium
-    await userFound.save()
-    res.status(200).json({id: userFound._id})
-
+    userFound.premium = !userFound.premium;
+    await userFound.save();
+    res.status(200).json({ id: userFound._id });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-}
+};
 
 export const login = async (req, res) => {
   let { user, password } = req.body;
@@ -137,7 +136,7 @@ export const login = async (req, res) => {
     {
       userId: userFound._id,
       userRoleToken:
-      userFound.role == "User" ? LOGIN_USER_TOKEN : LOGIN_ADMIN_TOKEN,
+        userFound.role == "User" ? LOGIN_USER_TOKEN : LOGIN_ADMIN_TOKEN,
       userEmail: userFound.email,
     },
     TOKEN_SECRET

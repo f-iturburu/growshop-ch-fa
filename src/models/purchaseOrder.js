@@ -1,11 +1,14 @@
-import {Schema, model} from 'mongoose';
+import { Schema, model } from "mongoose";
 
-const Order = new Schema({
+const purchaseOrder = new Schema(
+  {
     products: Array,
     userId: String,
-    successfulPayment: Boolean
-},{
-    timestamps:true
-})
+    successfulPayment: Boolean,
+  },
+  {
+    timestamps: true,
+  }
+);
 
-export default model('Order', Order);
+export default model("PurchaseOrder", purchaseOrder);

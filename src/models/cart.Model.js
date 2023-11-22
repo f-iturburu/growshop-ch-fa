@@ -1,13 +1,16 @@
-import {Schema, model} from 'mongoose';
-import Product from "./product.Model.js"
+import { Schema, model } from "mongoose";
+import Product from "./product.Model.js";
 
-const cart = new Schema({
+const cart = new Schema(
+  {
     products: Array,
     ownerId: String,
     totalProducts: Number,
-    totalPrice : Number
-},{
-    timestamps:true
-})
+    totalPrice: Number,
+  },
+  {
+    timestamps: true,
+  }
+);
 
-export default model('Cart', cart);
+export default model("Cart", cart);
